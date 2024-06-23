@@ -22,7 +22,7 @@ if btn:
     try:
         api_key="4d40a0735c2b47b69146db86045844d5"
         # API 1
-        weather=requests.get(f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}')
+        weather = requests.get('https://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=' + api_key)
         data=weather.text
         conv_weather=json.loads(data)
 
@@ -31,25 +31,26 @@ if btn:
         long=conv_weather["coord"]["lon"]
         lat=conv_weather["coord"]["lat"]
         description=conv_weather["weather"][0]["description"].title()
-        temp=f"{int(conv_weather["main"]["temp"])-273.15:.2f}°C"
-        feels_like=f"{int(conv_weather["main"]["feels_like"])-273.15:.2f}°C"
-        pressure=f"{conv_weather["main"]["pressure"]} hPa"
-        humidity=f"{conv_weather["main"]["humidity"]}%"
-        speed=f"{conv_weather["wind"]["speed"]} m/s"
-        degree=f"{conv_weather["wind"]["deg"]}°"
+        temp = "{:.2f}°C".format(int(conv_weather["main"]["temp"]) - 273.15)
+        feels_like = "{:.2f}°C".format(int(conv_weather["main"]["feels_like"]) - 273.15)
+        pressure = "{} hPa".format(conv_weather["main"]["pressure"])
+        humidity = "{}%".format(conv_weather["main"]["humidity"])
+        speed = "{} m/s".format(conv_weather["wind"]["speed"])
+        degree = "{}°".format(conv_weather["wind"]["deg"])
+
 
         # Displaying the Basic Weather Information
         df = pd.DataFrame([["City",city],["Weather Overview",description],["Temperature",temp],["Feels Like",feels_like],["Pressure",pressure],["Humidity",humidity],["Wind Speed",speed],["Wind Degree",degree],["Latitude",lat],["Longitude",long]])
         data_html = df.to_html(index=False, header=False, escape=False)
 
-        st.write(f"<h2 style='color:#FFC400';>Current Condition in {city.title()}</h2>",unsafe_allow_html=True)
+        st.write("<h2 style='color:#FFC400;'>Current Condition in {}</h2>".format(city.title()), unsafe_allow_html=True)
 
         st.write(data_html, unsafe_allow_html=True)
         st.write("<br>",unsafe_allow_html=True)
         
         st.write("<h2 style='color:#FFC400';>Air Quality Analysis</h2>",unsafe_allow_html=True)
         # API 2
-        road=requests.get(f"http://api.openweathermap.org/data/2.5/air_pollution?lat={lat}&lon={long}&appid={api_key}")
+        road = requests.get("http://api.openweathermap.org/data/2.5/air_pollution?lat=" + str(lat) + "&lon=" + str(long) + "&appid=" + api_key)
         data3=road.text
         conv_road=json.loads(data3)
         # Storing Air Quality Data
@@ -72,7 +73,7 @@ if btn:
         st.write("<h2 style='color:#FFC400';>Forecast for the Next Six Days</h2>",unsafe_allow_html=True)
 
         # API 3
-        forecast=requests.get(f"https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={long}&appid={api_key}")
+        forecast = requests.get("https://api.openweathermap.org/data/2.5/forecast?lat=" + str(lat) + "&lon=" + str(long) + "&appid=" + api_key)
         data2=forecast.text
         conv_forecast=json.loads(data2)
 
@@ -89,17 +90,17 @@ if btn:
                 date=splitted_date[0]
                 time=splitted_date[1][0:5]
                 description=day["weather"][0]["description"]
-                temp=f"{int(day["main"]["temp"])-273.15:.2f}°C"
-                feels_like=f"{int(day["main"]["feels_like"])-273.15:.2f}°C"
-                min_temp=f"{int(day["main"]["temp_min"])-273.15:.2f}°C"
-                max_temp=f"{int(day["main"]["temp_max"])-273.15:.2f}°C"
-                ground_level=f"{day["main"]["grnd_level"]} hPa"
-                humidity=f"{day["main"]["humidity"]}%"
-                speed=f"{day["wind"]["speed"]} m/s"
+                temp = "{:.2f}°C".format(int(day["main"]["temp"]) - 273.15)
+                feels_like = "{:.2f}°C".format(int(day["main"]["feels_like"]) - 273.15)
+                min_temp = "{:.2f}°C".format(int(day["main"]["temp_min"]) - 273.15)
+                max_temp = "{:.2f}°C".format(int(day["main"]["temp_max"]) - 273.15)
+                ground_level = "{} hPa".format(day["main"]["grnd_level"])
+                humidity = "{}%".format(day["main"]["humidity"])
+                speed = "{} m/s".format(day["wind"]["speed"])
                 six_day_data=[date,time,description,temp,feels_like,min_temp,max_temp,humidity,ground_level,speed]
                 six_day.append(six_day_data)
-                six_day_temperature.append(f"{int(day["main"]["temp"])-273.15:.0f}")
-                six_day_date.append(f"{splitted_date[0]}")
+                six_day_temperature.append("{:.0f}".format(int(day["main"]["temp"]) - 273.15))
+                six_day_date.append(splitted_date[0])
 
         # Displaying the 6 Day Forcast
         df2 = pd.DataFrame(
