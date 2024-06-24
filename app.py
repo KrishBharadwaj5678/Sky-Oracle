@@ -46,7 +46,6 @@ if btn:
         st.write("<h2 style='color:#FFC400;'>Current Condition in {}</h2>".format(city.title()), unsafe_allow_html=True)
 
         st.write(data_html, unsafe_allow_html=True)
-        st.write("<br>",unsafe_allow_html=True)
         
         st.write("<h2 style='color:#FFC400';>Air Quality Analysis</h2>",unsafe_allow_html=True)
         # API 2
@@ -109,7 +108,6 @@ if btn:
         
         data_html2 = df2.to_html(index=False, header=False, escape=False)
         st.write(data_html2, unsafe_allow_html=True)
-        st.write("<br>",unsafe_allow_html=True)
 
         # Weather Graph
         st.write("<h2 style='color:#FFC400';>Forecast Visualization</h2>",unsafe_allow_html=True)
